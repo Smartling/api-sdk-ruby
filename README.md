@@ -50,7 +50,7 @@ https://github.com/Smartling/api-sdk-ruby/issues
 Authors
 -------
 
-* (Pavel Ivashkov)[https://github.com/paiv]
+* [Pavel Ivashkov](https://github.com/paiv)
 
 
 Copyright and license

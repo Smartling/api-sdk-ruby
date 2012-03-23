@@ -1,0 +1,13 @@
+
+# Install from local gem
+gem install pkg/<latest.gem>
+
+# Dependencies
+* multi_json http://rubygems.org/gems/multi_json
+* rest-client http://rubygems.org/gems/rest-client
+
+# To make a gem package from source code
+rake test
+rake build
+rake install
+
