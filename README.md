@@ -3,7 +3,7 @@
 
 This repository contains the Ruby SDK for accessing the Smartling Translation API.
 
-The Smartling Translation API allows developers to seamlessly internationalize their website by automating the translation and integration of their site content.
+The Smartling Translation API lets developers to internationalize their website or app by automating the translation and integration of their site content.
 Developers can upload resource files and download the translated files in a language of their choosing. There are options to allow for professional translation, community translation and machine translation.
 
 For a full description of the Smartling Translation API, please read the docs at: http://docs.smartling.com
@@ -12,31 +12,10 @@ For a full description of the Smartling Translation API, please read the docs at
 Quick start
 -----------
 
-Clone the repo, `git clone git@github.com:Smartling/api-sdk-ruby.git`.
+Install latest gem package from here: https://github.com/Smartling/api-sdk-ruby/tree/master/pkg
+`gem install pkg/<latest gem>`
 
-
-Versioning
-----------
-
-For transparency and insight into our release cycle, and for striving to maintain backward compatibility, the Smartling Translation API SDK will be maintained under the Semantic Versioning guidelines as much as possible.
-
-Releases will be numbered with the follow format:
-
-`<major>.<minor>.<patch>`
-
-And constructed with the following guidelines:
-
-* Breaking backward compatibility bumps the major
-* New additions without breaking backward compatibility bumps the minor
-* Bug fixes and misc changes bump the patch
-
-For more information on SemVer, please visit http://semver.org/.
-
-
-Artifacts
----------
-
-Want to download the latest SDK? Get it here: https://github.com/Smartling/api-sdk-ruby/tree/master/pkg
+Follow the [sample code](https://github.com/Smartling/api-sdk-ruby/tree/master/samples) to upload and manage your files.
 
 
 Bug tracker
@@ -45,6 +24,15 @@ Bug tracker
 Have a bug? Please create an issue here on GitHub!
 
 https://github.com/Smartling/api-sdk-ruby/issues
+
+
+Hacking
+-------
+
+To get source code, clone the repo:
+`git clone git@github.com:Smartling/api-sdk-ruby.git`
+
+To contribute, fork it and follow [general GitHub guidelines](http://help.github.com/fork-a-repo/) with pull request.
 
 
 Authors
