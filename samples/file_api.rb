@@ -7,6 +7,7 @@ PROJECT_ID = 'YOUR_PROJECTID'
 
 puts 'Smartling Ruby client ' + Smartling::VERSION
 
+
 # Initialize client to sandbox
 sl = Smartling::File.sandbox(:apiKey => API_KEY, :projectId => PROJECT_ID)
 
@@ -14,21 +15,21 @@ sl = Smartling::File.sandbox(:apiKey => API_KEY, :projectId => PROJECT_ID)
 #sl = Smartling::File.new(:apiKey => API_KEY, :projectId => PROJECT_ID)
 
 # Upload YAML file
-res = sl.upload('data.yaml', 'path/file_name.yaml', 'YAML')
-puts res
+res = sl.upload('source_file.yaml', 'name.yaml', 'YAML')
+p res
 
 # Get list of uploaded files
 res = sl.list()
-puts res
+p res
 
-furi = 'path/file_name.yaml'
+name = 'path/file_name.yaml'
 lang = 'es-ES'
 
 # Request translation status of the file
-res = sl.status(furi, :locale => lang)
-puts res
+res = sl.status(name, :locale => lang)
+p res
 
 # Download translated file in specified language
-data = sl.download(furi, :locale => lang)
+data = sl.download(name, :locale => lang)
 puts data
 
