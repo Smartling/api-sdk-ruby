@@ -7,11 +7,11 @@ PROJECT_ID = 'YOUR_PROJECTID'
 
 puts 'Smartling Ruby client ' + Smartling::VERSION
 
-# Initialize File API client to sandbox
-sl = Smartling::File.sandbox(:api_key => API_KEY, :project_id => PROJECT_ID)
+# Initialize client to sandbox
+sl = Smartling::File.sandbox(:apiKey => API_KEY, :projectId => PROJECT_ID)
 
-# Initialize for production 
-#sl = Smartling::File.new(:api_key => API_KEY, :project_id => PROJECT_ID)
+# Initialize client for production File API
+#sl = Smartling::File.new(:apiKey => API_KEY, :projectId => PROJECT_ID)
 
 # Upload YAML file
 res = sl.upload('data.yaml', 'path/file_name.yaml', 'YAML')

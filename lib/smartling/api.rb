@@ -1,35 +1,37 @@
 require 'rest-client'
 require 'multi_json'
+require 'smartling/uri'
 
 module Smartling
 
   module Endpoints
-    V1 = 'https://api.smartling.com/v1'
-    SANDBOX_V1 = 'https://sandbox-api.smartling.com/v1'
+    V1 = 'https://api.smartling.com/v1/'
+    SANDBOX_V1 = 'https://sandbox-api.smartling.com/v1/'
     CURRENT = V1
     SANDBOX = SANDBOX_V1
   end
 
   class Api
-    attr_accessor :api_key, :project_id, :base_url
+    attr_accessor :apiKey, :projectId, :baseUrl
 
-    def initialize(args)
-      @api_key = args[:api_key] or raise ArgumentError, 'Missing :api_key parameter'
-      @project_id = args[:project_id] or raise ArgumentError, 'Missing :project_id parameter'
-      @base_url = args[:base_url] || Endpoints::CURRENT
+    def initialize(args = {})
+      @apiKey = args[:apiKey]
+      @projectId = args[:projectId]
+      @baseUrl = args[:baseUrl] || Endpoints::CURRENT
     end
 
-    def self.sandbox(args)
-      new(args.merge(:base_url => Endpoints::SANDBOX))
+    def self.sandbox(args = {})
+      new(args.merge(:baseUrl => Endpoints::SANDBOX))
     end
 
     def uri(path, params1 = nil, params2 = nil)
-      params = { :apiKey => @api_key, :projectId => @project_id }
+      uri = Uri.new(@baseUrl, path)
+      params = { :apiKey => @apiKey, :projectId => @projectId }
       params.merge!(params1) if params1
       params.merge!(params2) if params2
-      uri = URI.parse(@base_url + path)
-      uri.query = URI.respond_to?(:encode_www_form) ? URI.encode_www_form(params) : params.map {|k,v| k.to_s + "=" + URI.escape(v) }.join('&')
-      return uri.to_s
+      uri.params = params
+      uri.require(:apiKey, :projectId)
+      return uri
     end
 
     def check_response(res)

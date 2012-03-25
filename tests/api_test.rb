@@ -1,8 +1,5 @@
 #!/usr/bin/ruby
-$:.unshift File.expand_path('../../lib', __FILE__)
-require 'rubygems'
-require 'test/unit'
-require 'smartling'
+require 'tests/test_helper'
 
 module SmartlingTests
   class SmartlingApiTest < Test::Unit::TestCase
@@ -13,24 +10,24 @@ module SmartlingTests
     end
 
     def test_endpoints
-      sl = Smartling::Api.new(:api_key => '', :project_id => '')
-      assert_equal(Smartling::Endpoints::CURRENT, sl.base_url)
+      sl = Smartling::Api.new()
+      assert_equal(Smartling::Endpoints::CURRENT, sl.baseUrl)
 
-      sl = Smartling::Api.new(:api_key => '', :project_id => '', :base_url => Smartling::Endpoints::V1)
-      assert_equal(Smartling::Endpoints::V1, sl.base_url)
+      sl = Smartling::Api.new(:baseUrl => Smartling::Endpoints::V1)
+      assert_equal(Smartling::Endpoints::V1, sl.baseUrl)
 
-      sl = Smartling::Api.new(:api_key => '', :project_id => '', :base_url => Smartling::Endpoints::SANDBOX)
-      assert_equal(Smartling::Endpoints::SANDBOX, sl.base_url)
+      sl = Smartling::Api.new(:baseUrl => Smartling::Endpoints::SANDBOX)
+      assert_equal(Smartling::Endpoints::SANDBOX, sl.baseUrl)
 
-      sl = Smartling::Api.sandbox(:api_key => '', :project_id => '')
-      assert_equal(Smartling::Endpoints::SANDBOX, sl.base_url)
+      sl = Smartling::Api.sandbox()
+      assert_equal(Smartling::Endpoints::SANDBOX, sl.baseUrl)
 
-      sl = Smartling::Api.new(:api_key => '', :project_id => '', :base_url => 'custom')
-      assert_equal('custom', sl.base_url)
+      sl = Smartling::Api.new(:baseUrl => 'custom')
+      assert_equal('custom', sl.baseUrl)
     end
 
     def test_response_format
-      sl = Smartling::Api.new(:api_key => '', :project_id => '')
+      sl = Smartling::Api.new()
 
       res = stub_response(200, '{"response":{"code":"SUCCESS", "data":"foo"}}')
       assert_equal('foo', sl.process(res))
@@ -42,7 +39,7 @@ module SmartlingTests
     end
 
     def test_error_response
-      sl = Smartling::Api.new(:api_key => '', :project_id => '')
+      sl = Smartling::Api.new()
 
       res = stub_response(200, '{"response":{"code":"SUCCESS", "data":"foo"}}')
       assert_equal('foo', sl.process(res))
