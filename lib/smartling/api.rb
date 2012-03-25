@@ -11,44 +11,51 @@ module Smartling
   end
 
   class Api
-    attr_accessor :apiKey, :projectId, :baseUrl
-    def initialize(apiKey, projectId, baseUrl = nil)
-      @apiKey = apiKey or raise 'Missing apiKey parameter'
-      @projectId = projectId or raise 'Missing projectId parameter'
-      @baseUrl = baseUrl || Endpoints::CURRENT
+    attr_accessor :api_key, :project_id, :base_url
+
+    def initialize(args)
+      @api_key = args[:api_key] or raise ArgumentError, 'Missing :api_key parameter'
+      @project_id = args[:project_id] or raise ArgumentError, 'Missing :project_id parameter'
+      @base_url = args[:base_url] || Endpoints::CURRENT
+    end
+
+    def self.sandbox(args)
+      new(args.merge(:base_url => Endpoints::SANDBOX))
     end
 
     def uri(path, params1 = nil, params2 = nil)
-      params = { :apiKey => @apiKey, :projectId => @projectId }
+      params = { :apiKey => @api_key, :projectId => @project_id }
       params.merge!(params1) if params1
       params.merge!(params2) if params2
-      uri = URI.parse(@baseUrl + path)
+      uri = URI.parse(@base_url + path)
       uri.query = URI.respond_to?(:encode_www_form) ? URI.encode_www_form(params) : params.map {|k,v| k.to_s + "=" + URI.escape(v) }.join('&')
       return uri.to_s
     end
 
     def check_response(res)
       return if res.code == 200
-      begin
-        body = MultiJson.decode(res.body)
-      rescue
-      end
-      body = body['response'] if body
-      res.return! unless body
-      res.return! unless body['code']
-      raise "API error: #{body['code']} #{body['messages'].join(' -- ')}"
+      raise format_api_error(res.body)
     end
 
     def process(res)
       check_response(res)
       body = MultiJson.decode(res.body)
       body = body['response']
-
-      if body['code'] != 'SUCCESS'
-        raise "API error: #{body['code']} #{body['messages'].join(' -- ')}"
-      end
-
+      raise format_api_error(res.body) unless body && body['code'] == 'SUCCESS'
       return body['data']
+    end
+
+    def format_api_error(res)
+      begin
+        body = MultiJson.decode(res.body)
+      rescue
+      end
+      body = body['response'] if body
+      code = body['code'] if body
+      msg = body['messages'] if body
+      msg = msg.join(' -- ') if msg.is_a?(Array)
+      return "API error: #{code} #{msg}" if code
+      return res.description
     end
 
     def get(uri)

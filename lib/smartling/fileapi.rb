@@ -21,9 +21,8 @@ module Smartling
       return get(uri)
     end
 
-    def download(name, locale = nil, params = nil)
+    def download(name, params = nil)
       keys = { :fileUri => name }
-      keys[:locale] = locale if locale
       uri = uri(Services::FILE_GET, keys, params)
       return get_raw(uri)
     end
@@ -32,7 +31,7 @@ module Smartling
       keys = { :fileUri => name, :fileType => type }
       uri = uri(Services::FILE_UPLOAD, keys, params)
       file = ::File.new(file, 'rb') if file.is_a?(String)
-      return post(uri, { :file => file })
+      return post(uri, :file => file)
     end
   end
 
