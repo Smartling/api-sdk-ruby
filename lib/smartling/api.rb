@@ -27,27 +27,45 @@ module Smartling
       return uri.to_s
     end
 
+    def check_response(res)
+      return if res.code == 200
+      begin
+        body = MultiJson.decode(res.body)
+      rescue
+      end
+      body = body['response'] if body
+      res.return! unless body
+      res.return! unless body['code']
+      raise "API error: #{body['code']} #{body['messages'].join(' -- ')}"
+    end
+
     def process(res)
-      body = MultiJson.decode(res)
+      check_response(res)
+      body = MultiJson.decode(res.body)
       body = body['response']
 
       if body['code'] != 'SUCCESS'
-        raise "API error: #{body['code']} #{body['messages']}"
+        raise "API error: #{body['code']} #{body['messages'].join(' -- ')}"
       end
 
       return body['data']
     end
 
     def get(uri)
-      res = RestClient.get(uri)
-      return process(res)
+      RestClient.get(uri) {|res, _, _|
+        process(res)
+      }
     end
     def get_raw(uri)
-      return RestClient.get(uri)
+      RestClient.get(uri) {|res, _, _|
+        check_response(res)
+        res.body
+      }
     end
     def post(uri, params = nil)
-      res = RestClient.post(uri, params)
-      return process(res)
+      RestClient.post(uri, params) {|res, _, _|
+        process(res)
+      }
     end
 
     def log=(v)

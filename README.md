@@ -13,6 +13,7 @@ Quick start
 -----------
 
 Install latest gem package from here: https://github.com/Smartling/api-sdk-ruby/tree/master/pkg
+
 `gem install pkg/<latest gem>`
 
 Follow the [sample code](https://github.com/Smartling/api-sdk-ruby/tree/master/samples) to upload and manage your files.
@@ -30,6 +31,7 @@ Hacking
 -------
 
 To get source code, clone the repo:
+
 `git clone git@github.com:Smartling/api-sdk-ruby.git`
 
 To contribute, fork it and follow [general GitHub guidelines](http://help.github.com/fork-a-repo/) with pull request.
@@ -47,13 +49,14 @@ Copyright and license
 Copyright 2012 Smartling, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this work except in compliance with the License.
-You may obtain a copy of the License in the LICENSE file, or at:
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
