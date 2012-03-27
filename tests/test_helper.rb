@@ -35,12 +35,14 @@ module SmartlingTests
 
   def config
     return @config if @config
-    h = YAML.load_file(CONFIG) if File.exists?(CONFIG)
+    return unless File.exists?(CONFIG)
+    h = YAML.load_file(CONFIG)
     @config = h.keysym!
   end
 
   def server_config
-    h = config[:server] || {}
+    cfg = config() or raise 'Missing config file for server tests'
+    h = cfg[:server]
     h.keysym!
   end
 
