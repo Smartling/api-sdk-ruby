@@ -14,6 +14,45 @@
 
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'rubygems'
-require 'test/unit'
+require 'logger'
 require 'smartling'
+require 'test/unit'
+require 'yaml'
+
+class Hash
+  def keysym!
+    keys.each {|key|
+      self[(key.to_sym rescue key) || key] = delete(key)
+    }
+    self
+  end
+end
+
+module SmartlingTests
+  CONFIG = 'tests/config'
+
+  class << self
+
+  def config
+    return @config if @config
+    h = YAML.load_file(CONFIG) if File.exists?(CONFIG)
+    @config = h.keysym!
+  end
+
+  def server_config
+    h = config[:server] || {}
+    h.keysym!
+  end
+
+  def logger
+    l = Logger.new($stderr)
+    l.level = config[:loglevel]
+    l.formatter = proc {|sev, dt, prg, msg|
+      "#{sev}: #{msg}\n"
+    }
+    return l
+  end
+
+  end
+end
 

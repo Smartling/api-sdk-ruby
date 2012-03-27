@@ -17,7 +17,7 @@ require 'rake'
 gemspec = eval(File.read(Dir['*.gemspec'].first))
 
 task :default => :test
-task :test => ['test:all']
+task :test => ['test:client']
 
 desc 'Validate the gemspec'
 task :gemspec do
@@ -50,10 +50,21 @@ task :syntax do
 end
 
 namespace :test do
-  desc 'Run all tests'
-  task :all do
-    Dir['tests/**/*_test.rb'].each {|test_path|
-      system "ruby #{test_path}"
+  desc 'Run client tests'
+  task :client do
+    all = Dir['tests/**/*_test.rb']
+    srv = Dir['tests/**/srv_*_test.rb']
+    files = all.to_a - srv.to_a
+    files.each {|fn|
+      system "ruby #{fn}"
+    }
+  end
+
+  desc 'Run server tests'
+  task :server do
+    files = Dir['tests/**/srv_*_test.rb']
+    files.each {|fn|
+      system "ruby #{fn}"
     }
   end
 end
