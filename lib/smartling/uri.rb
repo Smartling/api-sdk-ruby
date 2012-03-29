@@ -36,7 +36,9 @@ module Smartling
 
       uri = URI.parse(@base)
       uri.merge!(@path) if @path
-      uri.query = URI.respond_to?(:encode_www_form) ? URI.encode_www_form(params) : params.map {|k,v| k.to_s + "=" + URI.escape(v) }.join('&')
+      if params.size > 0
+        uri.query = URI.respond_to?(:encode_www_form) ? URI.encode_www_form(params) : params.map {|k,v| k.to_s + "=" + URI.escape(v) }.join('&')
+      end
       return uri
     end
 

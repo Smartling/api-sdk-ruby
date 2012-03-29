@@ -13,7 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'tests/test_helper'
+$:.unshift File.expand_path('../', __FILE__)
+require 'test_helper'
 
 module SmartlingTests
   class SmartlingApiTest < Test::Unit::TestCase
