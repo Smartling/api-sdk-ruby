@@ -28,7 +28,7 @@ Gem::Specification.new {|gem|
 
   gem.require_path = 'lib'
   gem.files = Dir['README.md', 'LICENSE', '{lib}/**/*.rb', 'samples/**/*']
-  gem.test_files = Dir['tests/**/*']
+  gem.test_files = Dir['tests/**/*'] - ['tests/config']
 
   gem.add_dependency 'multi_json', '~> 1.0'
   gem.add_dependency 'rest-client', '~> 1.6'
