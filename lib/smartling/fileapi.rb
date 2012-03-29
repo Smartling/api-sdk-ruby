@@ -44,7 +44,7 @@ module Smartling
     def upload(file, name, type, params = nil)
       keys = { :fileUri => name, :fileType => type }
       uri = uri(Services::FILE_UPLOAD, keys, params).require(:fileUri, :fileType)
-      file = ::File.new(file, 'rb') if file.is_a?(String)
+      file = ::File.open(file, 'rb') if file.is_a?(String)
       return post(uri.to_s, :file => file)
     end
   end

@@ -14,22 +14,25 @@
 # limitations under the License.
 
 require 'tests/test_helper.rb'
+require 'iconv'
 
 module SmartlingTests
   class SmartlingFileApiTest < Test::Unit::TestCase
 
     TEST_FILE_YAML = 'tests/upload.yaml'
+    TEST_FILE_UTF16 = 'tests/utf16.yaml'
 
     def setup
       @config = SmartlingTests.server_config
       @log = SmartlingTests.logger
     end
 
-    def yaml_file
+    def yaml_file(encoding = nil)
       data = <<-EOL
 hello: world
 we have: cookies
       EOL
+      data = Iconv.conv(encoding, 'US-ASCII', data) if encoding
       f = Tempfile.new('smartling_tests')
       f.write(data)
       f.flush
@@ -68,7 +71,7 @@ we have: cookies
     end
 
     def test_4_download_en
-      @log.debug '<- FileAPI:download EN'
+      @log.debug '-> FileAPI:download EN'
       sl = Smartling::File.new(@config)
       
       res = nil
@@ -79,12 +82,41 @@ we have: cookies
     end
 
     def test_5_download_ru
-      @log.debug '<- FileAPI:download RU'
+      @log.debug '-> FileAPI:download RU'
       sl = Smartling::File.new(@config)
       
       res = nil
       assert_nothing_raised do
         res = sl.download(TEST_FILE_YAML, :locale => 'ru-RU')
+      end
+      @log.debug res.inspect
+    end
+
+    def test_6_utf16
+      @log.debug '<- FileAPI UTF-16 upload'
+      sl = Smartling::File.new(@config)
+
+      file = yaml_file('UTF-16')
+      data = file.read
+      file.pos = 0
+
+      res = nil
+      assert_nothing_raised do
+        res = sl.upload(file, TEST_FILE_UTF16, 'YAML')
+      end
+      @log.debug res.inspect
+
+      @log.debug '-> FileAPI UTF-16 download EN'
+      assert_nothing_raised do
+        res = sl.download(TEST_FILE_UTF16, :locale => 'en-US')
+      end
+      @log.debug res.inspect
+
+      assert_equal(YAML.load(data), YAML.load(res))
+
+      @log.debug '-> FileAPI UTF-16 download RU'
+      assert_nothing_raised do
+        res = sl.download(TEST_FILE_UTF16, :locale => 'ru-RU')
       end
       @log.debug res.inspect
     end
