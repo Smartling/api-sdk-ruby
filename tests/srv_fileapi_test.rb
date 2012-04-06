@@ -122,6 +122,20 @@ we have: cookies
       @log.debug res.inspect
     end
 
+    def test_7_filter
+      @log.debug '-> FileAPI full filter test'
+      sl = Smartling::File.new(@config)
+      res = nil
+      assert_nothing_raised do
+        res = sl.list(:locale => 'ru-RU', :uriMask => '%.yaml', :fileTypes => [:ios, :yaml],
+              :timestampAfter => Time.now - 3600, :timestampBefore => Time.now + 24*3600,
+              :offset => 0, :limit => 2)
+      end
+      @log.debug res.inspect
+      # FIXME: when sandbox adds support for filter parameters
+      assert(res['fileCount'] <= 2) unless sl.baseUrl == Smartling::Endpoints::SANDBOX
+    end
+
   end
 end
 

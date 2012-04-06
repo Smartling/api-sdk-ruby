@@ -47,3 +47,43 @@ p res
 data = sl.download(name, :locale => lang)
 puts data
 
+
+# Extended parameters
+
+# Upload with approved flag
+res = sl.upload('source_file.yaml', 'name.yaml', 'YAML', :approved => true)
+p res
+
+# Filter list by mask
+res = sl.list(:uriMask => '%.yaml')
+p res
+
+# Filter list by file type
+res = sl.list(:fileTypes => ['yaml', 'ios'])
+p res
+
+# Order list by attribute
+res = sl.list(:orderBy => ['fileUri', 'wordCount_desc'])
+p res
+
+# Page by page list
+page, size = 2, 10
+res = sl.list(:offset => (page - 1) * size, :limit => size)
+p res
+
+# Filter list by upload date
+res = sl.list(:timestampAfter => Time.utc(2012, 04, 05))
+p res
+
+# Filter list by upload date range
+res = sl.list(:timestampAfter => Time.utc(2012, 04, 01), :timestampBefore => Time.utc(2012, 05, 01))
+p res
+
+# Filter by translation status
+res = sl.list(:conditions => ['haveAllTranslated', 'haveAtLeastOneUnapproved'])
+p res
+
+# Note that you can combine any filter parameters in a single query
+res = sl.list(:fileTypes => 'yaml', :orderBy => 'fileUri', :offset => 20, :limit => 10)
+p res
+

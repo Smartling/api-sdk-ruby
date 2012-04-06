@@ -37,13 +37,36 @@ module Smartling
       uri = URI.parse(@base)
       uri.merge!(@path) if @path
       if params.size > 0
-        uri.query = URI.respond_to?(:encode_www_form) ? URI.encode_www_form(params) : params.map {|k,v| k.to_s + "=" + URI.escape(v) }.join('&')
+        uri.query = format_query(params)
       end
       return uri
     end
 
     def to_s
       to_uri.to_s
+    end
+
+    def format_query(params)
+    # TODO: UTF-8 encode keys and values
+    # URI.encode_www_form(params)
+      params.map {|k,v|
+        if v.respond_to?(:to_ary)
+          v.to_ary.map {|w|
+            k.to_s + '=' + format_value(w)
+          }.join('&')
+        else
+          k.to_s + '=' + format_value(v)
+        end
+      }.join('&')
+    end
+
+    def format_value(v)
+      v.is_a?(Time) ? format_time(v) :
+        URI.escape(v.to_s)
+    end
+
+    def format_time(t)
+      t.utc.strftime('%Y-%m-%dT%H:%M:%S')
     end
 
   end

@@ -27,6 +27,40 @@ module SmartlingTests
       assert_equal('http://hello.wo/foo/bar', uri.to_s)
     end
 
+    def test_params
+      uri = Smartling::Uri.new('http://hello.wo/')
+      uri.params = {:foo => 'x'}
+      assert_equal('http://hello.wo/?foo=x', uri.to_s)
+
+      uri = Smartling::Uri.new('http://hello.wo/')
+      uri.params = {:foo => 18}
+      assert_equal('http://hello.wo/?foo=18', uri.to_s)
+
+      uri = Smartling::Uri.new('http://hello.wo/')
+      uri.params = {:foo => true}
+      assert_equal('http://hello.wo/?foo=true', uri.to_s)
+
+      uri = Smartling::Uri.new('http://hello.wo/')
+      uri.params = {:foo => Time.utc(2012, 04, 05, 11, 19, 59)}
+      assert_equal('http://hello.wo/?foo=2012-04-05T11:19:59', uri.to_s)
+
+      uri = Smartling::Uri.new('http://hello.wo/')
+      uri.params = {:foo => Time.utc(2012, 04, 05, 11, 49, 17).localtime}
+      assert_equal('http://hello.wo/?foo=2012-04-05T11:49:17', uri.to_s)
+
+      uri = Smartling::Uri.new('http://hello.wo/')
+      uri.params = {:foo => ['hello']}
+      assert_equal('http://hello.wo/?foo=hello', uri.to_s)
+
+      uri = Smartling::Uri.new('http://hello.wo/')
+      uri.params = {:foo => ['hello', 'world']}
+      assert_equal('http://hello.wo/?foo=hello&foo=world', uri.to_s)
+
+      uri = Smartling::Uri.new('http://hello.wo/')
+      uri.params = {:foo => ['hello', 'world', 'of', Time.utc(2012)]}
+      assert_equal('http://hello.wo/?foo=hello&foo=world&foo=of&foo=2012-01-01T00:00:00', uri.to_s)
+    end
+
     def test_require
       uri = Smartling::Uri.new('http://hello.wo/')
       uri.require(:foo, :bar)
