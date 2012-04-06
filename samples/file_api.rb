@@ -83,7 +83,7 @@ p res
 res = sl.list(:conditions => ['haveAllTranslated', 'haveAtLeastOneUnapproved'])
 p res
 
-# Note that you can combine any filter parameters in a single query
+# Combine multiple filter parameters in a single query
 res = sl.list(:fileTypes => 'yaml', :orderBy => 'fileUri', :offset => 20, :limit => 10)
 p res
 
