@@ -47,6 +47,8 @@ p res
 data = sl.download(name, :locale => lang)
 puts data
 
+# Delete file
+sl.delete(name)
 
 # Extended parameters
 

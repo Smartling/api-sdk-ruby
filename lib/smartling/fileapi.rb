@@ -21,9 +21,12 @@ module Smartling
     FILE_STATUS = 'file/status'
     FILE_GET = 'file/get'
     FILE_UPLOAD = 'file/upload'
+    FILE_DELETE = 'file/delete'
   end
 
   class File < Api
+    alias :api_delete :delete
+
     def list(params = nil)
       uri = uri(Services::FILE_LIST, params)
       return get(uri.to_s)
@@ -46,6 +49,12 @@ module Smartling
       uri = uri(Services::FILE_UPLOAD, keys, params).require(:fileUri, :fileType)
       file = ::File.open(file, 'rb') if file.is_a?(String)
       return post(uri.to_s, :file => file)
+    end
+
+    def delete(name, params = nil)
+      keys = { :fileUri => name }
+      uri = uri(Services::FILE_DELETE, keys, params).require(:fileUri)
+      return api_delete(uri.to_s)
     end
   end
 

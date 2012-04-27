@@ -90,6 +90,11 @@ module Smartling
         process(res)
       }
     end
+    def delete(uri)
+      RestClient.delete(uri) {|res, _, _|
+        process(res)
+      }
+    end
 
     def log=(v)
       RestClient.log = v
