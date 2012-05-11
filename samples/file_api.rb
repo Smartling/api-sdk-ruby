@@ -74,11 +74,11 @@ res = sl.list(:offset => (page - 1) * size, :limit => size)
 p res
 
 # Filter list by upload date
-res = sl.list(:timestampAfter => Time.utc(2012, 04, 05))
+res = sl.list(:lastUploadedAfter => Time.utc(2012, 04, 05))
 p res
 
 # Filter list by upload date range
-res = sl.list(:timestampAfter => Time.utc(2012, 04, 01), :timestampBefore => Time.utc(2012, 05, 01))
+res = sl.list(:lastUploadedAfter => Time.utc(2012, 04, 01), :lastUploadedBefore => Time.utc(2012, 05, 01))
 p res
 
 # Filter by translation status

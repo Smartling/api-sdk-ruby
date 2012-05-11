@@ -128,7 +128,7 @@ we have: cookies
       res = nil
       assert_nothing_raised do
         res = sl.list(:locale => 'ru-RU', :uriMask => '%.yaml', :fileTypes => [:ios, :yaml],
-              :timestampAfter => Time.now - 3600, :timestampBefore => Time.now + 24*3600,
+              :lastUploadedAfter => Time.now - 3600, :lastUploadedBefore => Time.now + 24*3600,
               :offset => 0, :limit => 2)
       end
       @log.debug res.inspect
