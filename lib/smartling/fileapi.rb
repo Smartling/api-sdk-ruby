@@ -21,6 +21,7 @@ module Smartling
     FILE_STATUS = 'file/status'
     FILE_GET = 'file/get'
     FILE_UPLOAD = 'file/upload'
+    FILE_RENAME = 'file/rename'
     FILE_DELETE = 'file/delete'
   end
 
@@ -49,6 +50,12 @@ module Smartling
       uri = uri(Services::FILE_UPLOAD, keys, params).require(:fileUri, :fileType)
       file = ::File.open(file, 'rb') if file.is_a?(String)
       return post(uri.to_s, :file => file)
+    end
+
+    def rename(name, newname, params = nil)
+      keys = { :fileUri => name, :newFileUri => newname }
+      uri = uri(Services::FILE_RENAME, keys, params).require(:fileUri, :newFileUri)
+      return post(uri.to_s)
     end
 
     def delete(name, params = nil)

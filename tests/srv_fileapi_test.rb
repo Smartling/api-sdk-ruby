@@ -136,6 +136,17 @@ we have: cookies
       assert(res['fileCount'] <= 2) unless sl.baseUrl == Smartling::Endpoints::SANDBOX
     end
 
+    def test_8_rename
+      @log.debug '-> FileAPI rename file'
+      sl = Smartling::File.new(@config)
+      res = nil
+      assert_nothing_raised do
+        res = sl.rename(TEST_FILE_YAML, 'foo/foo/foo')
+        res = sl.rename('foo/foo/foo', TEST_FILE_YAML)
+      end
+      @log.debug res.inspect
+    end
+
     def test_99_delete
       # NOTE: might break the tests following this and uploading with the same name
       # until server actually deletes the file.
