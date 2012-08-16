@@ -47,10 +47,18 @@ p res
 data = sl.download(name, :locale => lang)
 puts data
 
+# Rename file
+newname = 'path/newname.yaml'
+sl.rename(name, newname)
+
 # Delete file
 sl.delete(name)
 
 # Extended parameters
+
+# Upload with callback URL
+res = sl.upload('source_file.yaml', 'name.yaml', 'YAML', :callbackUrl => 'http://yourdomain/someservice')
+p res
 
 # Upload with approved flag
 res = sl.upload('source_file.yaml', 'name.yaml', 'YAML', :approved => true)

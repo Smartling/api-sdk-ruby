@@ -147,6 +147,16 @@ we have: cookies
       @log.debug res.inspect
     end
 
+    def test_9_callbackurl
+      @log.debug '-> FileAPI upload with callback URL'
+      sl = Smartling::File.new(@config)
+      res = nil
+      assert_nothing_raised do
+        res = sl.upload(yaml_file, TEST_FILE_YAML, 'YAML', :callbackUrl => 'http://google.com/?q=hello')
+      end
+      @log.debug res.inspect
+    end
+
     def test_99_delete
       # NOTE: might break the tests following this and uploading with the same name
       # until server actually deletes the file.
