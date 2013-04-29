@@ -12,9 +12,9 @@ For a full description of the Smartling Translation API, please read the docs at
 Quick start
 -----------
 
-Install latest gem package from here: https://github.com/Smartling/api-sdk-ruby/tree/master/pkg
+Install latest gem package from RubyGems
 
-`gem install pkg/<latest gem>`
+`gem install smartling`
 
 Follow the [sample code](https://github.com/Smartling/api-sdk-ruby/tree/master/samples) to upload and manage your files.
 
