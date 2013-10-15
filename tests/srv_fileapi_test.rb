@@ -60,6 +60,17 @@ we have: cookies
       @log.debug res.inspect
     end
 
+    def test_2_1_upload
+      @log.debug '<- FileAPI:upload'
+      sl = Smartling::File.new(@config)
+
+      res = nil
+      assert_nothing_raised do
+        res = sl.upload(yaml_file.path, TEST_FILE_YAML, 'YAML')
+      end
+      @log.debug res.inspect
+    end
+
     def test_3_status
       @log.debug '<- FileAPI:status'
       sl = Smartling::File.new(@config)
