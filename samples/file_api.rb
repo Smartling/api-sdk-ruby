@@ -16,84 +16,93 @@
 require 'rubygems'
 require 'smartling'
 
-API_KEY = 'YOUR_APIKEY'
-PROJECT_ID = 'YOUR_PROJECTID'
+def print_msg(msg)
+  puts
+  puts msg
+end
 
-puts 'Smartling Ruby client ' + Smartling::VERSION
+API_KEY = 'YOUR_API_KEY' # change this value to use "Smartling API key" found on the Project Settings -> API page in dashboard
+PROJECT_ID = 'YOUR_PROJECT_ID' # change this value to use "Project Id" found on the Project Settings -> API page in dashboard
 
+print_msg "Smartling Ruby client #{Smartling::VERSION}"
 
-# Initialize client to sandbox
+# Initialize client to use File API on Sandbox
 sl = Smartling::File.sandbox(:apiKey => API_KEY, :projectId => PROJECT_ID)
 
-# Initialize client for production File API
+# Initialize client to use File API on Production
 #sl = Smartling::File.new(:apiKey => API_KEY, :projectId => PROJECT_ID)
 
-# Upload YAML file
-res = sl.upload('source_file.yaml', 'name.yaml', 'YAML')
+# Basic usage
+
+file = 'data.yaml' # your data file
+file_uri = 'my_files/data.yaml' # unique identifier given to the uploaded file
+file_type = 'YAML' # file type
+
+print_msg "Uploading file '#{file}' using file URI '#{file_uri}' and file type '#{file_type}'..."
+res = sl.upload(file, file_uri, file_type)
 p res
 
-# Get list of uploaded files
-res = sl.list()
+print_msg 'Listing all project files...'
+res = sl.list
 p res
 
-name = 'path/file_name.yaml'
-lang = 'es-ES'
+lang = 'es-ES' # any language that exists in your project
 
-# Request translation status of the file
-res = sl.status(name, :locale => lang)
+print_msg "Getting status for file URI '#{file_uri}' and language '#{lang}'..."
+res = sl.status(file_uri, :locale => lang)
 p res
 
-# Download translated file in specified language
-data = sl.download(name, :locale => lang)
+print_msg "Downloading translations for file URI '#{file_uri}' and language '#{lang}'..."
+data = sl.download(file_uri, :locale => lang)
 puts data
 
-# Rename file
-newname = 'path/newname.yaml'
-sl.rename(name, newname)
+new_file_uri = 'my_files/new_data.yaml' # new uri to uniquely identify the previously uploaded file
 
-# Delete file
-sl.delete(name)
+print_msg "Renaming file from '#{file_uri}' to '#{new_file_uri}'..."
+sl.rename(file_uri, new_file_uri)
+
+print_msg "Deleting file '#{new_file_uri}'..."
+sl.delete(new_file_uri)
 
 # Extended parameters
 
-# Upload with callback URL
-res = sl.upload('source_file.yaml', 'name.yaml', 'YAML', :callbackUrl => 'http://yourdomain/someservice')
+print_msg 'Uploading file with callback URL provided...'
+res = sl.upload(file, 'name.yaml', 'YAML', :callbackUrl => 'http://yourdomain.com/someservice')
 p res
 
-# Upload with approved flag
-res = sl.upload('source_file.yaml', 'name.yaml', 'YAML', :approved => true)
+print_msg 'Uploading file with approved flag provided...'
+res = sl.upload(file, 'name.yaml', 'YAML', :approved => true)
 p res
 
-# Filter list by mask
+print_msg 'Listing files using URI mask filter...'
 res = sl.list(:uriMask => '%.yaml')
 p res
 
-# Filter list by file type
+print_msg 'Listing files using file type filter...'
 res = sl.list(:fileTypes => ['yaml', 'ios'])
 p res
 
-# Order list by attribute
+print_msg 'Listing files ordered by attributes...'
 res = sl.list(:orderBy => ['fileUri', 'wordCount_desc'])
 p res
 
-# Page by page list
+print_msg 'Listing paginated files...'
 page, size = 2, 10
 res = sl.list(:offset => (page - 1) * size, :limit => size)
 p res
 
-# Filter list by upload date
+print_msg 'Listing files uploaded after a certain date...'
 res = sl.list(:lastUploadedAfter => Time.utc(2012, 04, 05))
 p res
 
-# Filter list by upload date range
+print_msg 'Listing files uploaded between a date range...'
 res = sl.list(:lastUploadedAfter => Time.utc(2012, 04, 01), :lastUploadedBefore => Time.utc(2012, 05, 01))
 p res
 
-# Filter by translation status
+print_msg 'Listing files using translation status...'
 res = sl.list(:conditions => ['haveAllTranslated', 'haveAtLeastOneUnapproved'])
 p res
 
-# Combine multiple filter parameters in a single query
+print_msg 'Listing files while combining multiple parameters...'
 res = sl.list(:fileTypes => 'yaml', :orderBy => 'fileUri', :offset => 20, :limit => 10)
 p res
-

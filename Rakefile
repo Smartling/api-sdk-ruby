@@ -31,9 +31,16 @@ task :build => :gemspec do
   FileUtils.mv "#{gemspec.name}-#{gemspec.version}.gem", 'pkg'
 end
 
+# You may try using 'sudo' in case you get any write permission errors while running this task...
 desc 'Install gem locally'
 task :install => :build do
-  system "gem install pkg/#{gemspec.name}-#{gemspec.version} --no-ri --no-rdoc"
+  system "gem install pkg/#{gemspec.name}-#{gemspec.version}.gem --no-ri --no-rdoc"
+end
+
+# You may try using 'sudo' in case you get any write permission errors while running this task...
+desc 'Uninstall gem locally'
+task :uninstall do
+  system "gem uninstall #{gemspec.name}"
 end
 
 desc 'Clean automatically generated files'
