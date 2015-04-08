@@ -47,10 +47,14 @@ res = sl.list
 p res
 
 lang = 'es-ES' # any language that exists in your project
+state = 'PUBLISHED' # state at which imported strings are imported as
 
 print_msg "Getting status for file URI '#{file_uri}' and language '#{lang}'..."
 res = sl.status(file_uri, :locale => lang)
 p res
+
+print_msg "Importing translation file '#{file}' using file URI '#{file_uri}' and file type '#{file_type}' and language '#{lang}' as '#{state}'..." 
+res = sl.import(file, file_uri, file_type, state, :locale => lang)
 
 print_msg "Downloading translations for file URI '#{file_uri}' and language '#{lang}'..."
 data = sl.download(file_uri, :locale => lang)
