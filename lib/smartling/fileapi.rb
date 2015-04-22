@@ -23,6 +23,7 @@ module Smartling
     FILE_UPLOAD = 'file/upload'
     FILE_RENAME = 'file/rename'
     FILE_DELETE = 'file/delete'
+    FILE_IMPORT = 'file/import'
   end
 
   class File < Api
@@ -62,6 +63,13 @@ module Smartling
       keys = { :fileUri => name }
       uri = uri(Services::FILE_DELETE, keys, params).require(:fileUri)
       return api_delete(uri.to_s)
+    end
+
+    def import(file, name, type, state, params = nil)
+        keys = { :fileUri => name, :fileType => type, :translationState => state}
+        uri = uri(Services::FILE_IMPORT, keys, params).require(:fileUri, :fileType, :locale, :translationState)
+        file = ::File.open(file, 'rb') if file.is_a?(String)
+        return post(uri.to_s, :file => file)
     end
   end
 
