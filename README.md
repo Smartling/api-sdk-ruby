@@ -1,5 +1,5 @@
 [![rubygems](https://img.shields.io/gem/v/smartling.svg)](https://rubygems.org/gems/smartling)
-[![build status](https://img.shields.io/travis/paiv/api-sdk-ruby.svg)](https://travis-ci.org/Smartling/api-sdk-ruby)
+[![build status](https://img.shields.io/travis/Smartling/api-sdk-ruby.svg)](https://travis-ci.org/Smartling/api-sdk-ruby)
 
 [Smartling Translation API](http://docs.smartling.com)
 =================
