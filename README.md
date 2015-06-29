@@ -1,3 +1,6 @@
+[![rubygems](https://img.shields.io/gem/v/smartling.svg)](https://rubygems.org/gems/smartling)
+[![build status](https://img.shields.io/travis/Smartling/api-sdk-ruby.svg)](https://travis-ci.org/Smartling/api-sdk-ruby)
+
 [Smartling Translation API](http://docs.smartling.com)
 =================
 
@@ -59,4 +62,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
