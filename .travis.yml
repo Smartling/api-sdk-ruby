@@ -4,3 +4,10 @@ rvm:
   - 2.1
   - 1.9
   - 1.8
+deploy:
+  provider: rubygems
+  api_key: "YOUR API KEY"
+  gemspec: smartling.gemspec
+  on:
+    tags: true
+    rvm: 1.9
