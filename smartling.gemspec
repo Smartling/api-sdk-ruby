@@ -23,7 +23,7 @@ Gem::Specification.new {|gem|
   gem.description = 'A Ruby library to utilize Smartling services'
   gem.authors = ['Pavel Ivashkov']
   gem.email = ['hi@smartling.com']
-  gem.homepage = 'https://docs.smartling.com'
+  gem.homepage = 'http://docs.smartling.com'
   gem.license = 'LICENSE'
 
   gem.require_path = 'lib'
