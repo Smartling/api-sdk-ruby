@@ -26,11 +26,9 @@ PROJECT_ID = 'YOUR_PROJECT_ID' # change this value to use "Project Id" found on 
 
 print_msg "Smartling Ruby client #{Smartling::VERSION}"
 
-# Initialize client to use File API on Sandbox
-sl = Smartling::File.sandbox(:apiKey => API_KEY, :projectId => PROJECT_ID)
-
 # Initialize client to use File API on Production
-#sl = Smartling::File.new(:apiKey => API_KEY, :projectId => PROJECT_ID)
+# To test in a sandbox account, create a new Files SANDBOX project in the Smartling dashboard and use the API key and project ID from that.
+sl = Smartling::File.new(:apiKey => API_KEY, :projectId => PROJECT_ID)
 
 # Basic usage
 
