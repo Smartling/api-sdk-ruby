@@ -77,7 +77,7 @@ we have: cookies
       
       res = nil
       assert_nothing_raised do
-        res = sl.status(TEST_FILE_YAML, :locale => 'en-US')
+        res = sl.status(TEST_FILE_YAML)
       end
       @log.debug res.inspect
     end
@@ -88,7 +88,7 @@ we have: cookies
       
       res = nil
       assert_nothing_raised do
-        res = sl.download(TEST_FILE_YAML, :locale => 'en-US')
+        res = sl.download_translated(TEST_FILE_YAML, 'en-US')
       end
       @log.debug res.inspect
     end
@@ -99,7 +99,7 @@ we have: cookies
       
       res = nil
       assert_nothing_raised do
-        res = sl.download(TEST_FILE_YAML, :locale => 'ru-RU')
+        res = sl.download_translated(TEST_FILE_YAML, 'ru-RU')
       end
       @log.debug res.inspect
     end
@@ -120,7 +120,7 @@ we have: cookies
 
       @log.debug '-> FileAPI UTF-16 download EN'
       assert_nothing_raised do
-        res = sl.download(TEST_FILE_UTF16, :locale => 'en-US')
+        res = sl.download_translated(TEST_FILE_UTF16, 'en-US')
       end
       @log.debug res.inspect
 
@@ -128,7 +128,7 @@ we have: cookies
 
       @log.debug '-> FileAPI UTF-16 download RU'
       assert_nothing_raised do
-        res = sl.download(TEST_FILE_UTF16, :locale => 'ru-RU')
+        res = sl.download_translated(TEST_FILE_UTF16, 'ru-RU')
       end
       @log.debug res.inspect
     end

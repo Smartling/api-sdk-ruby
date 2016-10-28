@@ -19,19 +19,19 @@ require 'smartling/uri'
 module Smartling
 
   module Endpoints
-    V1 = 'https://api.smartling.com/v1/'
-    SANDBOX_V1 = 'https://sandbox-api.smartling.com/v1/'
-    CURRENT = V1
-    SANDBOX = SANDBOX_V1
+    CURRENT = 'https://api.smartling.com/'
+    SANDBOX = 'https://sandbox-api.smartling.com/'
   end
 
   class Api
-    attr_accessor :apiKey, :projectId, :baseUrl
+    attr_accessor :baseUrl, :prefix
 
     def initialize(args = {})
-      @apiKey = args[:apiKey]
-      @projectId = args[:projectId]
+      @userId = args[:userId]
+      @userSecret = args[:userSecret]
+
       @baseUrl = args[:baseUrl] || Endpoints::CURRENT
+      @prefix = ''
     end
 
     def self.sandbox(args = {})
@@ -39,12 +39,11 @@ module Smartling
     end
 
     def uri(path, params1 = nil, params2 = nil)
-      uri = Uri.new(@baseUrl, path)
-      params = { :apiKey => @apiKey, :projectId => @projectId }
+      uri = Uri.new(@baseUrl, prefix, path)
+      params = {}
       params.merge!(params1) if params1
       params.merge!(params2) if params2
       uri.params = params
-      uri.require(:apiKey, :projectId)
       return uri
     end
 
@@ -75,23 +74,18 @@ module Smartling
     end
 
     def get(uri)
-      RestClient.get(uri) {|res, _, _|
+      RestClient.get(uri, token_header()) {|res, _, _|
         process(res)
       }
     end
     def get_raw(uri)
-      RestClient.get(uri) {|res, _, _|
+      RestClient.get(uri, token_header()) {|res, _, _|
         check_response(res)
         res.body
       }
     end
     def post(uri, params = nil)
-      RestClient.post(uri, params) {|res, _, _|
-        process(res)
-      }
-    end
-    def delete(uri)
-      RestClient.delete(uri) {|res, _, _|
+      RestClient.post(uri, params, token_header()) {|res, _, _|
         process(res)
       }
     end
@@ -102,6 +96,52 @@ module Smartling
     def proxy=(v)
       RestClient.proxy = v
     end
+
+    # auth
+
+    def token_header()
+      t = token()
+      raise "Authentication error" unless t
+      return {:Authorization => 'Bearer ' + t}
+    end
+
+    def process_auth(response) 
+      now = Time.new.to_i
+      @token = response[:accessToken]
+      @token_expiration = now + response[:expiresIn]
+      @refresh = response[:refreshToken]
+      @refresh_expiration = now + response[:refreshExpiresIn]
+    end
+
+    # Authenticate - /auth-api/v2/authenticate (POST)
+    def token()
+      # Check if current token is still valid
+      if @token
+        now = Time.new.to_i
+        if @token_expiration > now
+          return @token
+        elsif @refresh && @refresh_expiration > now
+          return refresh()
+        end
+      end
+
+      # Otherwise call authenticate endpoint
+      uri = uri('auth-api/v2/authenticate', {}, {})
+      RestClient.post(uri, {:userId => @userId, :userSecret => @userSecret}) {|res, _, _|
+        process_auth(process(res))
+        return @token
+      }
+    end
+
+    # Refresh Authentication - /auth-api/v2/authenticate/refresh (POST)
+    def refresh()
+      uri = uri('auth-api/v2/authenticate/refresh', {}, {})
+      RestClient.post(uri, {:refreshToken => @refreshToken}) {|res, _, _|
+        process_auth(process(res))
+        return @token
+      }
+    end
+
   end
 
 end

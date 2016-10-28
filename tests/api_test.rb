@@ -29,17 +29,20 @@ module SmartlingTests
     end
 
     def test_endpoints
+      base = 'https://api.smartling.com/'
+      sb = 'https://sandbox-api.smartling.com/'
+
       sl = Smartling::Api.new()
-      assert_equal(Smartling::Endpoints::CURRENT, sl.baseUrl)
+      assert_equal(base, sl.baseUrl)
 
-      sl = Smartling::Api.new(:baseUrl => Smartling::Endpoints::V1)
-      assert_equal(Smartling::Endpoints::V1, sl.baseUrl)
+      sl = Smartling::Api.new(:baseUrl => base)
+      assert_equal(base, sl.baseUrl)
 
-      sl = Smartling::Api.new(:baseUrl => Smartling::Endpoints::SANDBOX)
-      assert_equal(Smartling::Endpoints::SANDBOX, sl.baseUrl)
+      sl = Smartling::Api.new(:baseUrl => sb)
+      assert_equal(sb, sl.baseUrl)
 
       sl = Smartling::Api.sandbox()
-      assert_equal(Smartling::Endpoints::SANDBOX, sl.baseUrl)
+      assert_equal(sb, sl.baseUrl)
 
       sl = Smartling::Api.new(:baseUrl => 'custom')
       assert_equal('custom', sl.baseUrl)

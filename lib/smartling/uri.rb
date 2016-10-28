@@ -14,11 +14,12 @@
 
 module Smartling
   class Uri
-    attr_accessor :base,  :path, :params, :required
+    attr_accessor :base, :prefix, :path, :params, :required
 
-    def initialize(base, path = nil)
+    def initialize(base, prefix = '', path = nil)
       @base = base
       @path = path
+      @prefix = prefix
       @required = []
     end
 
@@ -35,6 +36,7 @@ module Smartling
       raise ArgumentError, "Missing parameters: " + missing.inspect if missing.size > 0
 
       uri = URI.parse(@base)
+      uri.merge!(@prefix) if @prefix
       uri.merge!(@path) if @path
       if params.size > 0
         uri.query = format_query(params)
