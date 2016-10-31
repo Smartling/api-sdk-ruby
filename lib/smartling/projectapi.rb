@@ -21,13 +21,13 @@ module Smartling
     # List Projects - /accounts-api/v2/accounts/{accountUid}/projects (GET)
     def list(accountUid, params = nil)
       uri = uri('accounts-api/v2/accounts/' + accountUid + '/projects', params)
-      return get(uri.to_s)
+      return get(uri)
     end
 
     # Project Details - /projects-api/v2/projects/{projectId} (GET)
     def details(projectId, params = nil)
       uri = uri('projects-api/v2/projects/' + projectId, params)
-      return get(uri.to_s)
+      return get(uri)
     end
     
   end

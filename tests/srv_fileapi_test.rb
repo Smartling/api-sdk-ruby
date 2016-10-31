@@ -77,7 +77,7 @@ we have: cookies
       
       res = nil
       assert_nothing_raised do
-        res = sl.status(TEST_FILE_YAML)
+        res = sl.status_all(TEST_FILE_YAML)
       end
       @log.debug res.inspect
     end
@@ -94,12 +94,12 @@ we have: cookies
     end
 
     def test_5_download_ru
-      @log.debug '-> FileAPI:download RU'
+      @log.debug '-> FileAPI:download FR'
       sl = Smartling::File.new(@config)
       
       res = nil
       assert_nothing_raised do
-        res = sl.download_translated(TEST_FILE_YAML, 'ru-RU')
+        res = sl.download_translated(TEST_FILE_YAML, 'fr-FR')
       end
       @log.debug res.inspect
     end
@@ -120,15 +120,13 @@ we have: cookies
 
       @log.debug '-> FileAPI UTF-16 download EN'
       assert_nothing_raised do
-        res = sl.download_translated(TEST_FILE_UTF16, 'en-US')
+        res = sl.download(TEST_FILE_UTF16)
       end
       @log.debug res.inspect
 
-      assert_equal(YAML.load(data), YAML.load(res))
-
-      @log.debug '-> FileAPI UTF-16 download RU'
+      @log.debug '-> FileAPI UTF-16 download FR'
       assert_nothing_raised do
-        res = sl.download_translated(TEST_FILE_UTF16, 'ru-RU')
+        res = sl.download_translated(TEST_FILE_UTF16, 'fr-FR')
       end
       @log.debug res.inspect
     end
@@ -138,7 +136,7 @@ we have: cookies
       sl = Smartling::File.new(@config)
       res = nil
       assert_nothing_raised do
-        res = sl.list(:locale => 'ru-RU', :uriMask => '%.yaml', :fileTypes => [:ios, :yaml],
+        res = sl.list(:uriMask => '%.yaml', :fileTypes => [:ios, :yaml],
               :lastUploadedAfter => Time.now - 3600, :lastUploadedBefore => Time.now + 24*3600,
               :offset => 0, :limit => 2)
       end
