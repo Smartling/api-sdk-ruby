@@ -14,12 +14,11 @@
 
 module Smartling
   class Uri
-    attr_accessor :base, :prefix, :path, :params, :required
+    attr_accessor :base,  :path, :params, :required
 
-    def initialize(base, prefix = '', path = nil)
+    def initialize(base, path = nil)
       @base = base
       @path = path
-      @prefix = prefix
       @required = []
     end
 
@@ -36,7 +35,6 @@ module Smartling
       raise ArgumentError, "Missing parameters: " + missing.inspect if missing.size > 0
 
       uri = URI.parse(@base)
-      uri.merge!(@prefix) if @prefix
       uri.merge!(@path) if @path
       if params.size > 0
         uri.query = format_query(params)
@@ -54,7 +52,7 @@ module Smartling
       params.map {|k,v|
         if v.respond_to?(:to_ary)
           v.to_ary.map {|w|
-            k.to_s + '=' + format_value(w)
+            k.to_s + '[]=' + format_value(w)
           }.join('&')
         else
           k.to_s + '=' + format_value(v)
@@ -68,7 +66,7 @@ module Smartling
     end
 
     def format_time(t)
-      t.utc.strftime('%Y-%m-%dT%H:%M:%S')
+      t.utc.iso8601
     end
 
   end

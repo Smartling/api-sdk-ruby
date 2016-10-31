@@ -18,6 +18,7 @@ require 'logger'
 require 'smartling'
 require 'test/unit'
 require 'yaml'
+require 'json'
 
 class Hash
   def keysym!

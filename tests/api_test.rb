@@ -17,20 +17,22 @@ $:.unshift File.expand_path('../', __FILE__)
 require 'test_helper'
 
 module SmartlingTests
+  class StubResponse
+    attr_accessor :code, :body
+  end
+
   class SmartlingApiTest < Test::Unit::TestCase
 
     def stub_response(code, body)
-      status = Net::HTTPResponse.new('', code, '')
-      if RestClient::Response.method(:create).arity > 3
-          RestClient::Response.create(body, status, {}, nil)
-      else
-          RestClient::Response.create(body, status, {})
-      end
+      response = StubResponse.new()
+      response.code = code
+      response.body = body
+      return response
     end
 
     def test_endpoints
       base = 'https://api.smartling.com/'
-      sb = 'https://sandbox-api.smartling.com/'
+      sb = 'https://api.stg.smartling.net/'
 
       sl = Smartling::Api.new()
       assert_equal(base, sl.baseUrl)
@@ -66,10 +68,10 @@ module SmartlingTests
       res = stub_response(200, '{"response":{"code":"SUCCESS", "data":"foo"}}')
       assert_equal('foo', sl.process(res))
 
-      res = stub_response(200, '{"response":{"code":"ERROR", "messages":[]}}')
+      res = stub_response(200, '{"response":{"code":"ERROR", "errors":[]}}')
       assert_raise RuntimeError do sl.process(res) end
 
-      res = stub_response(500, '{"response":{"code":"ERROR", "messages":[]}}')
+      res = stub_response(500, '{"response":{"code":"ERROR", "errors":[]}}')
       assert_raise RuntimeError do sl.process(res) end
 
       res = stub_response(500, '{"response":{"code":"ERROR"}}')
