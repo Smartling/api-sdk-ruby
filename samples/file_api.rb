@@ -21,9 +21,10 @@ def print_msg(msg)
   puts msg
 end
 
-USER_ID = 'esxmgnmtxspuswukmdbpafajwobrlm'
-USER_SECRET = '5ki7u9qodnsfu1cpei1ah9elg5Fl)r8oa25bpao7canfm40l92sggem'
-PROJECT_ID = '6ebe3b2ec' # change this value to use "Project Id" found on the Project Settings -> API page in dashboard
+# change these values to use those found on the Project Settings -> API page in dashboard
+USER_ID = 'USERID'
+USER_SECRET = 'USERSECRET'
+PROJECT_ID = 'PROJECTID' 
 
 print_msg "Smartling Ruby client #{Smartling::VERSION}"
 
