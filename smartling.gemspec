@@ -33,5 +33,5 @@ Gem::Specification.new {|gem|
   gem.add_dependency 'multi_json', '~> 1.0'
   gem.add_dependency 'rest-client', '~> 2.0'
   gem.platform = Gem::Platform::RUBY
-  gem.required_ruby_version = '>= 2.2'
+  gem.required_ruby_version = '>= 2.1'
 }
