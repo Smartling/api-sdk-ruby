@@ -19,18 +19,16 @@ require 'smartling/uri'
 module Smartling
 
   module Endpoints
-    V1 = 'https://api.smartling.com/v1/'
-    SANDBOX_V1 = 'https://sandbox-api.smartling.com/v1/'
-    CURRENT = V1
-    SANDBOX = SANDBOX_V1
+    CURRENT = 'https://api.smartling.com/'
+    SANDBOX = 'https://api.stg.smartling.net/'
   end
 
   class Api
-    attr_accessor :apiKey, :projectId, :baseUrl
+    attr_accessor :baseUrl, :prefix
 
     def initialize(args = {})
-      @apiKey = args[:apiKey]
-      @projectId = args[:projectId]
+      @userId = args[:userId]
+      @userSecret = args[:userSecret]
       @baseUrl = args[:baseUrl] || Endpoints::CURRENT
     end
 
@@ -40,25 +38,33 @@ module Smartling
 
     def uri(path, params1 = nil, params2 = nil)
       uri = Uri.new(@baseUrl, path)
-      params = { :apiKey => @apiKey, :projectId => @projectId }
+      params = {}
       params.merge!(params1) if params1
       params.merge!(params2) if params2
       uri.params = params
-      uri.require(:apiKey, :projectId)
       return uri
     end
 
     def check_response(res)
       return if res.code == 200
-      raise format_api_error(res.body)
+      format_api_error(res.body) 
+      raise 'API_ERROR' 
     end
 
     def process(res)
       check_response(res)
       body = MultiJson.decode(res.body)
-      body = body['response']
-      raise format_api_error(res.body) unless body && body['code'] == 'SUCCESS'
-      return body['data']
+      if body['response']
+        body = body['response']
+        if body['code'] == 'SUCCESS'
+          return body['data']
+        else
+          format_api_error(res.body) 
+          raise 'API_ERROR' 
+        end
+      end
+      raise 'API_ERROR' 
+      return nil
     end
 
     def format_api_error(res)
@@ -66,34 +72,50 @@ module Smartling
         body = MultiJson.decode(res.body)
       rescue
       end
-      body = body['response'] if body
-      code = body['code'] if body
-      msg = body['messages'] if body
-      msg = msg.join(' -- ') if msg.is_a?(Array)
-      return "API error: #{code} #{msg}" if code
-      return res.description
+
+      if body && body['response']
+        body = body['response'] 
+        STDERR.puts "\e[31m#{body['code']}\e[0m"
+        if body['errors']
+          body['errors'].each do |e|
+            STDERR.puts "\e[31m#{e['message']}\e[0m"
+          end
+        end
+      end
+    end
+
+    def call(uri, method, auth, upload, download, params = nil)
+      headers = {}
+      headers[:Authorization] = token_header() if auth
+      headers[:content_type] = :json unless upload
+      headers[:accept] = :json unless download
+      RestClient::Request.execute(:method => method, 
+                                  :url => uri.to_s,
+                                  :payload => params,
+                                  :headers => headers)  {|res, _, _|
+        if download
+          check_response(res)
+          res.body  
+        else
+          process(res)
+        end
+      }
     end
 
     def get(uri)
-      RestClient.get(uri) {|res, _, _|
-        process(res)
-      }
+      call(uri, :get, true, false, false)
     end
     def get_raw(uri)
-      RestClient.get(uri) {|res, _, _|
-        check_response(res)
-        res.body
-      }
+      call(uri, :get, true, false, true)
     end
     def post(uri, params = nil)
-      RestClient.post(uri, params) {|res, _, _|
-        process(res)
-      }
+      call(uri, :post, true, false, false, params.to_json)
     end
-    def delete(uri)
-      RestClient.delete(uri) {|res, _, _|
-        process(res)
-      }
+    def post_file(uri, params = nil)
+      call(uri, :post, true, true, false, params)
+    end
+    def post_file_raw(uri, params = nil)
+      call(uri, :post, true, true, true, params)
     end
 
     def log=(v)
@@ -102,6 +124,52 @@ module Smartling
     def proxy=(v)
       RestClient.proxy = v
     end
+
+    # auth
+
+    def token_header()
+      t = token()
+      raise 'AUTH_ERROR' if t.nil?
+      return "Bearer #{t}"
+    end
+
+    def process_auth(response) 
+      now = Time.new.to_i
+      @token = response['accessToken']
+      @token_expiration = now + response['expiresIn'].to_i
+      @refresh = response['refreshToken']
+      @refresh_expiration = now + response['refreshExpiresIn'].to_i
+    end
+
+    # Authenticate - /auth-api/v2/authenticate (POST)
+    def token()
+      # Check if current token is still valid
+      if @token
+        now = Time.new.to_i
+        if @token_expiration > now
+          return @token
+        elsif @refresh && @refresh_expiration > now
+          return refresh()
+        end
+      end
+
+      # Otherwise call authenticate endpoint
+      uri = uri('auth-api/v2/authenticate', {}, {})
+      RestClient.post(uri.to_s, {:userIdentifier => @userId, :userSecret => @userSecret}.to_json, {:content_type => :json, :accept => :json}) {|res, _, _|
+        process_auth(process(res))
+        return @token
+      }
+    end
+
+    # Refresh Authentication - /auth-api/v2/authenticate/refresh (POST)
+    def refresh()
+      uri = uri('auth-api/v2/authenticate/refresh', {}, {})
+      RestClient.post(uri.to_s, {:refreshToken => @refreshToken}.to_json, {:content_type => :json, :accept => :json}) {|res, _, _|
+        process_auth(process(res))
+        return @token
+      }
+    end
+
   end
 
 end

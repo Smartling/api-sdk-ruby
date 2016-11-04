@@ -21,7 +21,7 @@ Gem::Specification.new {|gem|
 
   gem.summary = 'Smartling SDK'
   gem.description = 'A Ruby library to utilize Smartling services'
-  gem.authors = ['Pavel Ivashkov']
+  gem.authors = ['Emilien Huet']
   gem.email = ['hi@smartling.com']
   gem.homepage = 'http://docs.smartling.com'
   gem.license = 'LICENSE'
@@ -31,7 +31,7 @@ Gem::Specification.new {|gem|
   gem.test_files = Dir['tests/**/*'] - ['tests/config']
 
   gem.add_dependency 'multi_json', '~> 1.0'
-  gem.add_dependency 'rest-client', '~> 1.6'
+  gem.add_dependency 'rest-client', '~> 2.0'
   gem.platform = Gem::Platform::RUBY
-  gem.required_ruby_version = '>= 1.8.6'
+  gem.required_ruby_version = '>= 2.1'
 }

@@ -1,4 +1,4 @@
-# Copyright 2012 Smartling, Inc.
+# Copyright 2016 Smartling, Inc.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'smartling/version'
-require 'smartling/fileapi'
-require 'smartling/projectapi'
+require 'smartling/api'
+
+module Smartling
+
+  class Project < Api
+    
+    # List Projects - /accounts-api/v2/accounts/{accountUid}/projects (GET)
+    def list(accountUid, params = nil)
+      uri = uri('accounts-api/v2/accounts/' + accountUid + '/projects', params)
+      return get(uri)
+    end
+
+    # Project Details - /projects-api/v2/projects/{projectId} (GET)
+    def details(projectId, params = nil)
+      uri = uri('projects-api/v2/projects/' + projectId, params)
+      return get(uri)
+    end
+    
+  end
+end
 

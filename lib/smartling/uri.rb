@@ -52,7 +52,7 @@ module Smartling
       params.map {|k,v|
         if v.respond_to?(:to_ary)
           v.to_ary.map {|w|
-            k.to_s + '=' + format_value(w)
+            k.to_s + '[]=' + format_value(w)
           }.join('&')
         else
           k.to_s + '=' + format_value(v)
@@ -66,7 +66,7 @@ module Smartling
     end
 
     def format_time(t)
-      t.utc.strftime('%Y-%m-%dT%H:%M:%S')
+      t.utc.iso8601
     end
 
   end
