@@ -44,12 +44,13 @@ Authors
 -------
 
 * [Pavel Ivashkov](https://github.com/paiv)
+* [Emilien Huet](https://github.com/emilienh)
 
 
 Copyright and license
 ---------------------
 
-Copyright 2012 Smartling, Inc.
+Copyright 2012 - 2016 Smartling, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
