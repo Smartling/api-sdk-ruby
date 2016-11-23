@@ -15,6 +15,7 @@
 require 'rest-client'
 require 'multi_json'
 require 'smartling/uri'
+require 'json'
 
 module Smartling
 
