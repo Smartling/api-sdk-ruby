@@ -25,6 +25,7 @@ module Smartling
   end
 
   class Api
+    EXPIRATION_OFFSET = 60
     attr_accessor :baseUrl, :prefix
 
     def initialize(args = {})
@@ -137,9 +138,9 @@ module Smartling
     def process_auth(response) 
       now = Time.new.to_i
       @token = response['accessToken']
-      @token_expiration = now + response['expiresIn'].to_i
+      @token_expiration = now + response['expiresIn'].to_i - EXPIRATION_OFFSET
       @refresh = response['refreshToken']
-      @refresh_expiration = now + response['refreshExpiresIn'].to_i
+      @refresh_expiration = now + response['refreshExpiresIn'].to_i - EXPIRATION_OFFSET
     end
 
     # Authenticate - /auth-api/v2/authenticate (POST)
@@ -165,7 +166,7 @@ module Smartling
     # Refresh Authentication - /auth-api/v2/authenticate/refresh (POST)
     def refresh()
       uri = uri('auth-api/v2/authenticate/refresh', {}, {})
-      RestClient.post(uri.to_s, {:refreshToken => @refreshToken}.to_json, {:content_type => :json, :accept => :json}) {|res, _, _|
+      RestClient.post(uri.to_s, {:refreshToken => @refresh}.to_json, {:content_type => :json, :accept => :json}) {|res, _, _|
         process_auth(process(res))
         return @token
       }
