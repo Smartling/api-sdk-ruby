@@ -32,7 +32,7 @@ module SmartlingTests
 
     def test_endpoints
       base = 'https://api.smartling.com/'
-      sb = 'https://api.stg.smartling.net/'
+      sb = 'https://api.test.smartling.net/'
 
       sl = Smartling::Api.new()
       assert_equal(base, sl.baseUrl)
@@ -41,9 +41,6 @@ module SmartlingTests
       assert_equal(base, sl.baseUrl)
 
       sl = Smartling::Api.new(:baseUrl => sb)
-      assert_equal(sb, sl.baseUrl)
-
-      sl = Smartling::Api.sandbox()
       assert_equal(sb, sl.baseUrl)
 
       sl = Smartling::Api.new(:baseUrl => 'custom')
