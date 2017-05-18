@@ -15,13 +15,12 @@
 require 'rest-client'
 require 'multi_json'
 require 'smartling/uri'
-require 'json'
+require 'oj'
 
 module Smartling
 
   module Endpoints
     CURRENT = 'https://api.smartling.com/'
-    SANDBOX = 'https://api.stg.smartling.net/'
   end
 
   class Api
@@ -32,10 +31,6 @@ module Smartling
       @userId = args[:userId]
       @userSecret = args[:userSecret]
       @baseUrl = args[:baseUrl] || Endpoints::CURRENT
-    end
-
-    def self.sandbox(args = {})
-      new(args.merge(:baseUrl => Endpoints::SANDBOX))
     end
 
     def uri(path, params1 = nil, params2 = nil)
@@ -49,13 +44,13 @@ module Smartling
 
     def check_response(res)
       return if res.code == 200
-      format_api_error(res.body) 
+      format_api_error(res) 
       raise 'API_ERROR' 
     end
 
     def process(res)
       check_response(res)
-      body = MultiJson.decode(res.body)
+      body = MultiJson.load(res.body)
       if body['response']
         body = body['response']
         if body['code'] == 'SUCCESS'
@@ -71,7 +66,7 @@ module Smartling
 
     def format_api_error(res)
       begin
-        body = MultiJson.decode(res.body)
+        body = MultiJson.load(res.body)
       rescue
       end
 
@@ -111,7 +106,7 @@ module Smartling
       call(uri, :get, true, false, true)
     end
     def post(uri, params = nil)
-      call(uri, :post, true, false, false, params.to_json)
+      call(uri, :post, true, false, false, MultiJson.dump(params))
     end
     def post_file(uri, params = nil)
       call(uri, :post, true, true, false, params)
@@ -157,7 +152,7 @@ module Smartling
 
       # Otherwise call authenticate endpoint
       uri = uri('auth-api/v2/authenticate', {}, {})
-      RestClient.post(uri.to_s, {:userIdentifier => @userId, :userSecret => @userSecret}.to_json, {:content_type => :json, :accept => :json}) {|res, _, _|
+      RestClient.post(uri.to_s, MultiJson.dump({:userIdentifier => @userId, :userSecret => @userSecret}), {:content_type => :json, :accept => :json}) {|res, _, _|
         process_auth(process(res))
         return @token
       }
@@ -166,7 +161,7 @@ module Smartling
     # Refresh Authentication - /auth-api/v2/authenticate/refresh (POST)
     def refresh()
       uri = uri('auth-api/v2/authenticate/refresh', {}, {})
-      RestClient.post(uri.to_s, {:refreshToken => @refresh}.to_json, {:content_type => :json, :accept => :json}) {|res, _, _|
+      RestClient.post(uri.to_s, MultiJson.dump({:refreshToken => @refresh}), {:content_type => :json, :accept => :json}) {|res, _, _|
         process_auth(process(res))
         return @token
       }

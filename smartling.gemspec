@@ -30,7 +30,7 @@ Gem::Specification.new {|gem|
   gem.files = Dir['README.md', 'LICENSE', '{lib}/**/*.rb', 'samples/**/*']
   gem.test_files = Dir['tests/**/*'] - ['tests/config']
 
-  gem.add_dependency 'json', '~> 2.0'
+  gem.add_dependency 'oj', '~> 3.0'
   gem.add_dependency 'multi_json', '~> 1.0'
   gem.add_dependency 'rest-client', '~> 2.0'
 
