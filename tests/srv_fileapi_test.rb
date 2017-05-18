@@ -141,8 +141,6 @@ we have: cookies
               :offset => 0, :limit => 2)
       end
       @log.debug res.inspect
-      # FIXME: when sandbox adds support for filter parameters
-      assert(res['fileCount'] <= 2) unless sl.baseUrl == Smartling::Endpoints::SANDBOX
     end
 
     def test_8_rename

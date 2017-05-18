@@ -43,9 +43,6 @@ module SmartlingTests
       sl = Smartling::Api.new(:baseUrl => sb)
       assert_equal(sb, sl.baseUrl)
 
-      sl = Smartling::Api.sandbox()
-      assert_equal(sb, sl.baseUrl)
-
       sl = Smartling::Api.new(:baseUrl => 'custom')
       assert_equal('custom', sl.baseUrl)
     end

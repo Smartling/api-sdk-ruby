@@ -14,5 +14,5 @@
 
 module Smartling
   # This follows Semantic Versioning http://semver.org/
-  VERSION = '2.0.2'
+  VERSION = '2.0.3'
 end
