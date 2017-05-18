@@ -48,7 +48,7 @@ module Smartling
 
     def check_response(res)
       return if res.code == 200
-      format_api_error(res.body) 
+      format_api_error(res) 
       raise 'API_ERROR' 
     end
 
@@ -60,7 +60,7 @@ module Smartling
         if body['code'] == 'SUCCESS'
           return body['data']
         else
-          format_api_error(res.body) 
+          format_api_error(res) 
           raise 'API_ERROR' 
         end
       end
