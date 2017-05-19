@@ -1,6 +1,5 @@
 language: ruby
 cache: bundler
-gem: smartling
 rvm:
 - 2.1.9
 - 2.2.6
@@ -8,6 +7,7 @@ rvm:
 before_install:
 - gem install bundler
 deploy:
+  gem: smartling
   provider: rubygems
   api_key:
     secure: Sq+xnqlHm/VoOweKbTw7VJyHYfbn32Ri2j0uYufLeF6Fv5iQ0pmz1tluixCCUUq5oXpAw1wERFfP0Mp1bbMrMU0tsKEvfPGecopkeBcXiSKbe/IJnGTONlfvg/sGDzdDoYFmc0lNdVCrcx2mpdWIRdCZ8/MAoQM5r3KAo8DHCI4=
