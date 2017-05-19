@@ -1,5 +1,6 @@
 language: ruby
 cache: bundler
+gem: smartling
 rvm:
 - 2.1.9
 - 2.2.6
