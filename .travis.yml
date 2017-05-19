@@ -1,8 +1,10 @@
 language: ruby
+cache: bundler
 rvm:
-- 2.1
-- 2.2
-- 2.3
+- 2.1.9
+- 2.2.6
+- 2.3.3
+- 2.4.0
 before_install:
 - gem install bundler
 deploy:
@@ -12,4 +14,4 @@ deploy:
   gemspec: smartling.gemspec
   on:
     tags: true
-    rvm: 2.1
+    rvm: 2.4.0

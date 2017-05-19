@@ -35,5 +35,5 @@ Gem::Specification.new {|gem|
   gem.add_runtime_dependency 'rest-client', '~> 2.0'
 
   gem.platform = Gem::Platform::RUBY
-  gem.required_ruby_version = '>= 2.1'
+  gem.required_ruby_version = '>= 2.1.9'
 }
