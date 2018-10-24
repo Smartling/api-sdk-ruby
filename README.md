@@ -9,7 +9,7 @@ This repository contains the Ruby SDK for accessing the Smartling Translation AP
 The Smartling Translation API lets developers to internationalize their website or app by automating the translation and integration of their site content.
 Developers can upload resource files and download the translated files in a language of their choosing. There are options to allow for professional translation, community translation and machine translation.
 
-For a full description of the Smartling Translation API, please read the docs at: http://docs.smartling.com
+For a full description of the Smartling Translation API, please read the docs at: https://api-reference.smartling.com
 
 
 Quick start
