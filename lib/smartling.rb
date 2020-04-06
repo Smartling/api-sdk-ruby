@@ -16,4 +16,4 @@ require 'smartling/version'
 require 'smartling/fileapi'
 require 'smartling/issueapi'
 require 'smartling/projectapi'
-
+require 'smartling/stringapi'
