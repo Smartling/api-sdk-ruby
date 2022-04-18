@@ -103,7 +103,7 @@ module Smartling
     def delete(name, params = nil)
       keys = { :fileUri => name }
       uri = uri("files-api/v2/projects/#{@projectId}/file/delete", keys, params).require(:fileUri)
-      return post(uri)
+      return post(uri, keys)
     end
 
     # Last Modified (by locale) - /files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified (GET)
