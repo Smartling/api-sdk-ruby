@@ -1,3 +1,13 @@
+IMPORTANT
+---
+Smartling has decided to archive this SDK repository due to its low popularity and our inability to maintain it. We appreciate the support and contributions from the community and hope that this repository has been helpful to you. Please feel free to fork this repository and continue developing it if you wish.
+
+Please note that we will not be accepting any future pull requests.
+
+Thank you for your understanding.
+
+---
+
 [![rubygems](https://img.shields.io/gem/v/smartling.svg)](https://rubygems.org/gems/smartling)
 [![build status](https://travis-ci.org/Smartling/api-sdk-ruby.svg)](https://travis-ci.org/Smartling/api-sdk-ruby)
 
